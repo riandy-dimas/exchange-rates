@@ -79,7 +79,7 @@ const App: React.FC = () => {
   const [isCurrencyLoading, setIsCurrencyLoading] = useState(false)
   const classes = useStyles();
 
-  const currencies = currencyData.filter(data => currencyList.indexOf(data.currency) > -1)
+  const currencies = currencyData.filter(data => currencyList.indexOf(data.currency) > -1).sort((a, b) => a.currency.localeCompare(b.currency))
   const filteredAddCurrencyList = CURRENCY_LIST.filter(currency => currencyList.indexOf(currency.currency) === -1)
   const filteredSwitchCurrencyList = CURRENCY_LIST.filter(currency => currency.currency !== baseCurrency.currency)
 
