@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { CURRENCY_LIST } from './config'
+import { CurrencyData, CurrencyList } from './types'
 
 import { 
   Container,
@@ -6,25 +8,26 @@ import {
   Toolbar, 
 } from '@material-ui/core';
 import { 
-  createMuiTheme,
   createStyles,
   makeStyles,
   ThemeProvider 
 } from '@material-ui/core/styles';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 
+import theme from './utils/AppTheme'
 import { Cards, ElevationAppBar, MainCurrency, AddCurrencyDialog } from './components'
+import { getCurrencyRates } from './services/CurrencyService'
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#832232'
-    },
-    secondary: {
-      main: '#CE8964'
-    }
-  }
-})
+const initialValue = 10.00
+const initialBaseCurrency = 'USD'
+
+const initialCurrenciesData: CurrencyData[] = CURRENCY_LIST.map(currency => ({
+  label: `${currency.currency} - ${currency.label}`,
+  currency: currency.currency,
+  value: initialValue,
+  rates: 0,
+  flagCode: currency.flagCode,
+}))
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -49,89 +52,31 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const App: React.FC = () => {
-  const [value, setValue] = useState(10.00)
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [currencyList, setCurrencyList] = useState(['IDR'])
-  const classes = useStyles();
-
-  type CurrencyProps = {
-    currency: string
-    label: string
-    flagCode: string
-  }
-
-  const addCurrencyList: CurrencyProps[] = [
-    // {
-    //   currency: 'USD',
-    //   label: 'United States dollar',
-    //   flagCode: 'us',
-    // },
-    {
-      currency: 'CAD',
-      label: 'Canadian dollar',
-      flagCode: 'ca',
-    },
-    {
-      currency: 'IDR',
-      label: 'Indonesian rupiah',
-      flagCode: 'id',
-    },
-    {
-      currency: 'GBP',
-      label: 'Pound sterling',
-      flagCode: 'gb',
-    },
-    {
-      currency: 'CHF',
-      label: 'Swiss franc',
-      flagCode: 'ch',
-    },
-    {
-      currency: 'SGD',
-      label: 'Singapore dollar',
-      flagCode: 'sg',
-    },
-    {
-      currency: 'INR',
-      label: 'Indian rupee',
-      flagCode: 'in',
-    },
-    {
-      currency: 'MYR',
-      label: 'Malaysian ringgit',
-      flagCode: 'my',
-    },
-    {
-      currency: 'JPY',
-      label: 'Japanese yen',
-      flagCode: 'jp',
-    },
-    {
-      currency: 'KRW',
-      label: 'South Korean won',
-      flagCode: 'kr',
-    },
-  ]
-
-  type CurrencyData = {
-    label: string
-    currency: string
-    value: number
-    rates: number
-    flagCode: string
-  }
-
-  const currenciesData: CurrencyData[] = addCurrencyList.map(currency => ({
+const mapCurrencyData = (currencyList: CurrencyList[], rates: any) => {
+  const result: CurrencyData[] = currencyList.map(currency => ({
     label: `${currency.currency} - ${currency.label}`,
     currency: currency.currency,
-    value,
-    rates: Math.random() * 1000,
+    value: initialValue,
+    rates: rates[currency.currency],
     flagCode: currency.flagCode,
   }))
+  return result
+}
 
-  const currencies = currenciesData.filter(currencyData => currencyList.indexOf(currencyData.currency) > -1)
-  const filteredAddCurrencyList = addCurrencyList.filter(currency => currencyList.indexOf(currency.currency) === -1)
+const App: React.FC = () => {
+  const [value, setValue] = useState(initialValue)
+  const [showAddDialog, setShowAddDialog] = useState(false)
+  const [currencyList, setCurrencyList] = useState(['IDR'])
+  const [currencyData, setCurrencyData] = useState(initialCurrenciesData)
+  const [isCurrencyLoading, setIsCurrencyLoading] = useState(false)
+  const classes = useStyles();
+
+  const currencies = currencyData.filter(data => currencyList.indexOf(data.currency) > -1)
+  const filteredAddCurrencyList = CURRENCY_LIST.filter(currency => currencyList.indexOf(currency.currency) === -1)
+
+  useEffect(() => {
+    handleGetCurrencyData()
+  }, [])
 
   const handleCloseAddCurrencyDialog = (value: string) => {
     if (value) {
@@ -142,6 +87,21 @@ const App: React.FC = () => {
 
   const handleClearCurrency = (currency: string) => {
     setCurrencyList(currencyList.filter(c => c !== currency))
+  }
+
+  const handleGetCurrencyData = () => {
+    setIsCurrencyLoading(true)
+    getCurrencyRates({
+      baseCurrency: initialBaseCurrency,
+      onSucceed: (rates: any) => {
+        const mappedData = mapCurrencyData(CURRENCY_LIST, rates);
+        setCurrencyData([...mappedData])
+        setIsCurrencyLoading(false)
+      },
+      onFailed: () => {
+        setIsCurrencyLoading(false)
+      }
+    })
   }
 
   return (
@@ -159,11 +119,13 @@ const App: React.FC = () => {
             label="USD - United States Dollar"
             value={value}
             onChange={setValue}
+            onBlur={() => {}}
           />
           <Cards 
             value={value}
             currencies={currencies}
             onClear={handleClearCurrency}
+            isLoading={isCurrencyLoading}
           />
           <Fab color="primary" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
             <PostAddIcon className={classes.extendedIcon} />

@@ -9,6 +9,8 @@ import {
   Card,
   CardContent,
   Typography,
+  Backdrop,
+  CircularProgress
 } from '@material-ui/core';
 import {
   createStyles,
@@ -53,7 +55,11 @@ const useStyles = makeStyles(() =>
       alignItems: 'center',
       justifyContent: 'center',
       color: "#484848"
-    }
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
   }),
 );
 
@@ -161,10 +167,11 @@ type CardProps = {
 type CardsProps = {
   value: number
   currencies: CardProps[]
+  isLoading: boolean
   onClear: Function
 }
 
-const Cards = ({ value, currencies, onClear }: CardsProps) => {
+const Cards = ({ value, currencies, onClear, isLoading }: CardsProps) => {
   const classes = useStyles({})
 
   return (
@@ -190,6 +197,12 @@ const Cards = ({ value, currencies, onClear }: CardsProps) => {
           Let's start with adding a currency!
         </Typography>
       }
+    <Backdrop 
+      className={classes.backdrop} 
+      open={isLoading}
+    >
+      <CircularProgress />
+    </Backdrop>
     </Box>
   )
 }

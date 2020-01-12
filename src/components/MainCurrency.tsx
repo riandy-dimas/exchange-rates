@@ -64,9 +64,10 @@ type MainCurrencyProps = {
   currency: string
   label: string
   onChange: Function
+  onBlur: Function
 }
 
-const MainCurrency = ({ value, currency, label, onChange }: MainCurrencyProps) => {
+const MainCurrency = ({ value, currency, label, onBlur, onChange }: MainCurrencyProps) => {
   const formatNumeral = '0,0.00'
   const [isFocused, setIsFocused] = useState(false)
   const classes = useStyles({});
@@ -78,6 +79,7 @@ const MainCurrency = ({ value, currency, label, onChange }: MainCurrencyProps) =
 
   const handleBlur = (value: number) => {
     onChange(numeral(numeral(value).format(formatNumeral)).value())
+    onBlur()
     setIsFocused(false)
   }
 
