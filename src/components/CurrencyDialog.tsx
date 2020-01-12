@@ -23,15 +23,16 @@ type CurrencyProps = {
   flagCode: string
 }
 
-type AddCurrencyDialogProps = {
+type CurrencyDialogProps = {
   onClose: Function
   open: boolean
   currencies: CurrencyProps[]
+  title: string
 }
 
-const AddCurrencyDialog = (props: AddCurrencyDialogProps) => {
+const CurrencyDialog = (props: CurrencyDialogProps) => {
   const classes = useStyles()
-  const { onClose, open, currencies } = props;
+  const { onClose, open, currencies, title } = props;
 
   const handleClose = () => {
     onClose();
@@ -43,7 +44,7 @@ const AddCurrencyDialog = (props: AddCurrencyDialogProps) => {
 
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Select currency</DialogTitle>
+      <DialogTitle id="simple-dialog-title">{ title }</DialogTitle>
       <List>
         {currencies.map(currency => (
           <ListItem button onClick={() => handleListItemClick(currency.currency)} key={currency.currency}>
@@ -60,4 +61,4 @@ const AddCurrencyDialog = (props: AddCurrencyDialogProps) => {
   )
 }
 
-export { AddCurrencyDialog }
+export { CurrencyDialog }

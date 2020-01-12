@@ -134,11 +134,12 @@ type ElementProps = {
   index: number,
   flagCode: string,
   isLastCard: boolean,
-  onFlagClick: (currency: CurrencyData) => void
+  baseCurrency: string
+  onFlagClick: (currency: string) => void
   onClear: Function
 }
 
-const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, onClear, onFlagClick }: ElementProps) => {
+const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, onClear, onFlagClick, baseCurrency }: ElementProps) => {
   const cardClasses = cardStyles({})
   const formattedValue = numeral(value * rates).format(FORMAT_NUMERAL)
   const formattedRates = numeral(rates).format(FORMAT_NUMERAL)
@@ -148,7 +149,7 @@ const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, o
         <HighlightOffIcon />
       </IconButton>
       <CardContent className={cardClasses.box}>
-        <IconButton onClick={() => onFlagClick({ currency, label, value, rates, flagCode })} className={cardClasses.flag}>
+        <IconButton onClick={() => onFlagClick(currency)} className={cardClasses.flag}>
           <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
         </IconButton>
         <Box>
@@ -157,7 +158,7 @@ const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, o
             <Typography className={cardClasses.title}>{ currency }</Typography>
             <Typography className={cardClasses.value}>{ formattedValue }</Typography>
           </Box>
-          <Typography className={cardClasses.note}>{ `1 USD = ${currency} ${formattedRates}` }</Typography>
+          <Typography className={cardClasses.note}>{ `1 ${baseCurrency} = ${currency} ${formattedRates}` }</Typography>
         </Box>
       </CardContent>
     </Card>
@@ -177,7 +178,7 @@ type CardsProps = {
   isLoading: boolean
   baseCurrency: CurrencyData
   onClear: Function
-  onFlagClick: (currency: CurrencyData, baseCurrency: CurrencyData) => void
+  onFlagClick: (currency: string, baseCurrency: CurrencyData) => void
 }
 
 const Cards = ({ value, currencies, onClear, isLoading, onFlagClick, baseCurrency }: CardsProps) => {
@@ -197,7 +198,8 @@ const Cards = ({ value, currencies, onClear, isLoading, onFlagClick, baseCurrenc
             index={index}
             isLastCard={index === currencies.length - 1}
             onClear={onClear}
-            onFlagClick={(currency: CurrencyData) => onFlagClick(currency, baseCurrency)}
+            onFlagClick={(currency: string) => onFlagClick(currency, baseCurrency)}
+            baseCurrency={baseCurrency.currency}
           />
         )
       }

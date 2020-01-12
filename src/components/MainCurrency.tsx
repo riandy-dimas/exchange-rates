@@ -4,6 +4,7 @@ import {
   Box,
   Paper,
   Typography,
+  IconButton,
   Input,
 } from '@material-ui/core';
 import { 
@@ -32,12 +33,15 @@ const useStyles = makeStyles(() =>
       backgroundColor: theme.palette.primary.dark
     },
     flag: {
-      boxShadow: 'inset 2px 0px 0px #333',
       borderRadius: '15px',
       backgroundSize: 'cover',
-      height: '40px',
+      height: '50px',
+      width: '50px',
+      padding: 0,
+      margin: 0,
       backgroundPosition: 'center',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      boxShadow: 'inset 1px 1px 1px #555'
     },
     subTitle: {
       color: theme.palette.secondary.main,
@@ -66,10 +70,10 @@ type MainCurrencyProps = {
   label: string
   flagCode: string
   onChange: Function
-  onBlur: Function
+  onFlagClick: Function
 }
 
-const MainCurrency = ({ value, currency, label, onBlur, onChange, flagCode }: MainCurrencyProps) => {
+const MainCurrency = ({ value, currency, label, onFlagClick, onChange, flagCode }: MainCurrencyProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const classes = useStyles({});
   const localeValue = numeral(value).format(FORMAT_NUMERAL)
@@ -78,16 +82,12 @@ const MainCurrency = ({ value, currency, label, onBlur, onChange, flagCode }: Ma
     onChange(event.target.value);
   };
 
-  const handleBlur = (value: number) => {
-    onChange(numeral(numeral(value).format(FORMAT_NUMERAL)).value())
-    onBlur()
-    setIsFocused(false)
-  }
-
   return (
     <Paper variant="elevation" component="div" className={classes.box} style={{ borderStyle: isFocused ? 'solid' : 'dashed' }}>
-      <FlagIcon code={flagCode} className={classes.flag} size='2x' />
-      <Box>
+        <IconButton onClick={() => onFlagClick(currency)} className={classes.flag}>
+          <FlagIcon code={flagCode} className={classes.flag} size='2x' />
+        </IconButton>      
+        <Box>
         <Typography className={classes.subTitle}>{ label }</Typography>
         <Box className={classes.currencyBox}>
           <Typography className={classes.title}>{ currency }</Typography>
@@ -104,7 +104,6 @@ const MainCurrency = ({ value, currency, label, onBlur, onChange, flagCode }: Ma
               }
             }}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => handleBlur(value)}
           />
         </Box>
       </Box>

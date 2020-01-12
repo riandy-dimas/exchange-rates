@@ -15,7 +15,7 @@ import {
 import PostAddIcon from '@material-ui/icons/PostAdd';
 
 import theme from './utils/AppTheme'
-import { Cards, ElevationAppBar, MainCurrency, AddCurrencyDialog } from './components'
+import { Cards, ElevationAppBar, MainCurrency, CurrencyDialog } from './components'
 import { getCurrencyRates } from './services/CurrencyService'
 
 const initialValue = 10.00
@@ -73,6 +73,7 @@ const App: React.FC = () => {
   const [baseCurrency, setBaseCurrency] = useState(initialBaseCurrency)
   const [value, setValue] = useState(initialValue)
   const [showAddDialog, setShowAddDialog] = useState(false)
+  const [showSwitchDialog, setShowSwitchDialog] = useState(false)
   const [currencyList, setCurrencyList] = useState(initialCurrencyList)
   const [currencyData, setCurrencyData] = useState(initialCurrencyData)
   const [isCurrencyLoading, setIsCurrencyLoading] = useState(false)
@@ -80,6 +81,7 @@ const App: React.FC = () => {
 
   const currencies = currencyData.filter(data => currencyList.indexOf(data.currency) > -1)
   const filteredAddCurrencyList = CURRENCY_LIST.filter(currency => currencyList.indexOf(currency.currency) === -1)
+  const filteredSwitchCurrencyList = CURRENCY_LIST.filter(currency => currency.currency !== baseCurrency.currency)
 
   useEffect(() => {
     handleGetCurrencyData()
@@ -92,18 +94,24 @@ const App: React.FC = () => {
     setShowAddDialog(false)
   }
 
+  const handleCloseSwitchCurrencyDialog = (value: string) => {
+    if (value) {
+      handleFlagClick(value, baseCurrency)
+    }
+    setShowSwitchDialog(false)
+  }
+
   const handleClearCurrency = (currency: string) => {
     setCurrencyList(currencyList.filter(c => c !== currency))
   }
 
-  const handleFlagClick = (currency: CurrencyData, baseCurrency: CurrencyData) => {
-    const filteredList = currencyList.filter(c => c !== currency.currency)
+  const handleFlagClick = (currency: string, baseCurrency: CurrencyData) => {
+    const filteredList = currencyList.filter(c => c !== currency)
     filteredList.push(baseCurrency.currency)
-    console.log('kkkkkkk', [...filteredList], baseCurrency)
     setCurrencyList([...filteredList])
-    setBaseCurrency(currency)
+    setBaseCurrency(currencyData.find(c => c.currency === currency) || initialBaseCurrency)
 
-    handleGetCurrencyData(currency.currency)
+    handleGetCurrencyData(currency)
   }
 
   const handleGetCurrencyData = (defaultBaseCurrency?: string) => {
@@ -137,7 +145,7 @@ const App: React.FC = () => {
             label={mainCurrency.label}
             value={value}
             onChange={setValue}
-            onBlur={() => {}}
+            onFlagClick={() => setShowSwitchDialog(true)}
             flagCode={mainCurrency.flagCode}
           />
           <Cards 
@@ -153,10 +161,17 @@ const App: React.FC = () => {
             Add Currency
           </Fab>
         </Container>
-        <AddCurrencyDialog 
+        <CurrencyDialog 
           open={showAddDialog}
           onClose={handleCloseAddCurrencyDialog}
           currencies={filteredAddCurrencyList}
+          title="Add currency"
+        />
+        <CurrencyDialog 
+          open={showSwitchDialog}
+          onClose={handleCloseSwitchCurrencyDialog}
+          currencies={filteredSwitchCurrencyList}
+          title="Change currency"
         />
       </ThemeProvider>
     </div>
