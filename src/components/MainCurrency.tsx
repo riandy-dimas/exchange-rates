@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import numeral from 'numeral'
 import { 
   Box,
+  Paper,
   Typography,
   Input,
 } from '@material-ui/core';
@@ -29,6 +30,7 @@ const useStyles = makeStyles(() =>
     box: {
       height: '80px',
       border: `1px dashed ${theme.palette.primary.contrastText}`,
+      color: theme.palette.primary.contrastText,
       borderRadius: '20px',
       padding: '10px 20px',
       boxSizing: 'border-box',
@@ -36,7 +38,8 @@ const useStyles = makeStyles(() =>
       display: 'grid',
       gridTemplateColumns: '1fr 5fr',
       gridColumnGap: '15px',
-      alignItems: 'center'
+      alignItems: 'center',
+      backgroundColor: theme.palette.primary.dark
     },
     flag: {
       boxShadow: 'inset 2px 0px 0px #333',
@@ -90,7 +93,7 @@ const MainCurrency = ({ value, currency, label, onChange }: Props) => {
   }
 
   return (
-    <Box component="div" className={classes.box} style={{ borderStyle: isFocused ? 'solid' : 'dashed' }}>
+    <Paper variant="elevation" component="div" className={classes.box} style={{ borderStyle: isFocused ? 'solid' : 'dashed' }}>
       <FlagIcon code={'us'} className={classes.flag} size='2x' />
       <Box>
         <Typography className={classes.subTitle}>{ label }</Typography>
@@ -114,7 +117,7 @@ const MainCurrency = ({ value, currency, label, onChange }: Props) => {
           />
         </Box>
       </Box>
-    </Box>
+    </Paper>
   )
 }
 

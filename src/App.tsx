@@ -63,11 +63,11 @@ const App: React.FC = () => {
   }
 
   const addCurrencyList: CurrencyProps[] = [
-    {
-      currency: 'USD',
-      label: 'United States dollar',
-      flagCode: 'us',
-    },
+    // {
+    //   currency: 'USD',
+    //   label: 'United States dollar',
+    //   flagCode: 'us',
+    // },
     {
       currency: 'CAD',
       label: 'Canadian dollar',
@@ -141,6 +141,10 @@ const App: React.FC = () => {
     setShowAddDialog(false)
   }
 
+  const handleClearCurrency = (currency: string) => {
+    setCurrencyList(currencyList.filter(c => c !== currency))
+  }
+
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>
@@ -160,6 +164,7 @@ const App: React.FC = () => {
           <Cards 
             value={value}
             currencies={currencies}
+            onClear={handleClearCurrency}
           />
           <Fab color="primary" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
             <PostAddIcon className={classes.extendedIcon} />

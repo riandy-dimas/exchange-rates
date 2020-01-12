@@ -5,12 +5,10 @@ import { FlagIcon } from './FlagIcon'
 
 import { 
   Box,
-  Button,
+  IconButton,
   Card,
   CardContent,
-  CardActions,
   Typography,
-  Theme
 } from '@material-ui/core';
 import {
   createMuiTheme,
@@ -18,6 +16,7 @@ import {
   makeStyles
 } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const defaultCSSProperties: { [x: string]: CSSProperties} = {
   card: {
@@ -119,6 +118,10 @@ const cardStyles = makeStyles(() =>
       textAlign: 'right',
       borderTop: `2px solid ${theme.palette.divider}`
     },
+    clearButton: {
+      position: 'absolute',
+      right: 0
+    }
   })
 );
 
@@ -129,16 +132,20 @@ type ElementProps = {
   rates: number,
   index: number,
   flagCode: string,
-  isLastCard: boolean
+  isLastCard: boolean,
+  onClear: Function
 }
 
-const Element = ({ label, currency, value, rates, index, flagCode, isLastCard }: ElementProps) => {
+const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, onClear }: ElementProps) => {
   const formatNumeral = '0,0.00'
   const cardClasses = cardStyles({})
   const formattedValue = numeral(value * rates).format(formatNumeral)
   const formattedRates = numeral(rates).format(formatNumeral)
   return (
     <Card className={cardClasses[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined" style={isLastCard ? { borderBottom: 'none' } : {}}>
+      <IconButton onClick={() => onClear(currency)} className={cardClasses.clearButton}>
+        <HighlightOffIcon />
+      </IconButton>
       <CardContent className={cardClasses.box}>
         <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
         <Box>
@@ -156,17 +163,18 @@ const Element = ({ label, currency, value, rates, index, flagCode, isLastCard }:
 
 type CardProps = {
   currency: string
-  label: string,
-  rates: number,
+  label: string
+  rates: number
   flagCode: string
 }
 
 type CardsProps = {
   value: number
   currencies: CardProps[]
+  onClear: Function
 }
 
-const Cards = ({ value, currencies }: CardsProps) => {
+const Cards = ({ value, currencies, onClear }: CardsProps) => {
   const classes = useStyles({})
 
   return (
@@ -182,6 +190,7 @@ const Cards = ({ value, currencies }: CardsProps) => {
             key={index}
             index={index}
             isLastCard={index === currencies.length - 1}
+            onClear={onClear}
           />
         )
       }

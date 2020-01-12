@@ -2,6 +2,21 @@ import React from 'react';
 import { Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemText, Avatar } from '@material-ui/core';
 import { FlagIcon } from './FlagIcon'
 
+import { 
+  createStyles,
+  makeStyles
+} from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    flag: {
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      transform: "scale(2)"
+    }
+  })
+);
+
 type Currency = {
   currency: string
   label: string
@@ -15,6 +30,7 @@ type Props = {
 }
 
 const AddCurrencyDialog = (props: Props) => {
+  const classes = useStyles()
   const { onClose, open, currencies } = props;
 
   const handleClose = () => {
@@ -32,8 +48,8 @@ const AddCurrencyDialog = (props: Props) => {
         {currencies.map(currency => (
           <ListItem button onClick={() => handleListItemClick(currency.currency)} key={currency.currency}>
             <ListItemAvatar>
-              <Avatar>
-                <FlagIcon code={currency.flagCode} />
+              <Avatar variant="rounded">
+                <FlagIcon className={classes.flag} code={currency.flagCode} />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={currency.label} />
