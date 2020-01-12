@@ -11,10 +11,24 @@ import {
   createStyles,
   makeStyles
 } from '@material-ui/core/styles';
-
 import { FlagIcon } from './FlagIcon'
 import theme from '../utils/AppTheme'
 import { FORMAT_NUMERAL } from '../config'
+
+type MainCurrencyProps = {
+  /** Three letter currency code based on `ISO 4217`. */
+  currency: string
+  /** Two letter flag code of the currrency code based on `ISO 3166`. */
+  flagCode: string
+  /** The description of the currency. */
+  label: string
+  /** Function to be called when changing the input value. */
+  onChange: Function
+  /** Function to be called when user click the flag. */
+  onFlagClick: Function
+  /** Current to be converted number value. */
+  value: number
+}
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -64,20 +78,17 @@ const useStyles = makeStyles(() =>
   })
 );
 
-type MainCurrencyProps = {
-  value: number
-  currency: string
-  label: string
-  flagCode: string
-  onChange: Function
-  onFlagClick: Function
-}
-
-const MainCurrency = ({ value, currency, label, onFlagClick, onChange, flagCode }: MainCurrencyProps) => {
+const MainCurrency = ({ 
+  currency, 
+  flagCode,
+  label, 
+  onChange, 
+  onFlagClick, 
+  value, 
+}: MainCurrencyProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const classes = useStyles({});
   const localeValue = numeral(value).format(FORMAT_NUMERAL)
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };

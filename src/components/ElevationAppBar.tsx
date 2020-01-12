@@ -2,18 +2,20 @@ import React from 'react'
 import { 
   AppBar, 
   Toolbar, 
-  Typography 
+  Typography,
 } from '@material-ui/core';
 import { 
   createStyles,
   makeStyles,
 } from '@material-ui/core/styles';
-
 import theme from '../utils/AppTheme'
-
-
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ElevationScroll from '../utils/ElevationScroll'
+
+type ElevationAppBarProps = {
+  /** Title of the application bar. */
+  title: string
+}
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,11 +27,6 @@ const useStyles = makeStyles(() =>
     }
   }),
 );
-
-type ElevationAppBarProps = {
-  /** Title of the AppBar */
-  title: string
-}
 
 const ElevationAppBar: React.FC<ElevationAppBarProps> = ({ title }) => {
   const classes = useStyles()

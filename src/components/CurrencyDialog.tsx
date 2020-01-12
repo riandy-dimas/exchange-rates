@@ -1,11 +1,30 @@
 import React from 'react';
-import { Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemText, Avatar } from '@material-ui/core';
+import { 
+  Avatar,
+  Dialog, 
+  DialogTitle, 
+  List, 
+  ListItem, 
+  ListItemAvatar, 
+  ListItemText, 
+} from '@material-ui/core';
 import { FlagIcon } from './FlagIcon'
-
+import { SimplifiedCurrencyData } from '../types'
 import { 
   createStyles,
   makeStyles
 } from '@material-ui/core/styles';
+
+type CurrencyDialogProps = {
+  /** List of currency that will be shown as list. */
+  currencies: SimplifiedCurrencyData[]
+  /** Function to be called when the dialog is closed, returns selected value if any. */
+  onClose: Function
+  /** If `true`, the dialog will be showed. */
+  open: boolean
+  /** Set the title of the dialog. */
+  title: string
+}
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -16,19 +35,6 @@ const useStyles = makeStyles(() =>
     }
   })
 );
-
-type CurrencyProps = {
-  currency: string
-  label: string
-  flagCode: string
-}
-
-type CurrencyDialogProps = {
-  onClose: Function
-  open: boolean
-  currencies: CurrencyProps[]
-  title: string
-}
 
 const CurrencyDialog = (props: CurrencyDialogProps) => {
   const classes = useStyles()

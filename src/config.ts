@@ -1,4 +1,4 @@
-import { CurrencyList } from './types'
+import { SimplifiedCurrencyData } from './types'
 
 const API_PATH = {
   'GET_CURRENCY_RATES': 'https://api.exchangeratesapi.io/latest'
@@ -6,7 +6,7 @@ const API_PATH = {
 
 const FORMAT_NUMERAL = '0,0.000000'
 
-const CURRENCY_LIST: CurrencyList[] = [
+const CURRENCY_LIST: SimplifiedCurrencyData[] = [
   {
     currency: 'CAD',
     label: 'Canadian dollar',

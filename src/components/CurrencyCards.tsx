@@ -1,43 +1,32 @@
 import React from 'react'
-import numeral from 'numeral'
+import cn from 'classnames'
 import { CurrencyData } from '../types'
-import { FORMAT_NUMERAL } from '../config'
-
-import { FlagIcon } from './FlagIcon'
-
+import { CurrencyCard } from './CurrencyCard'
 import { 
-  Box,
-  IconButton,
-  Card,
-  CardContent,
-  Typography,
   Backdrop,
-  CircularProgress
+  Box,
+  CircularProgress,
+  Typography,
 } from '@material-ui/core';
 import {
   createStyles,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core/styles';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-
 import theme from '../utils/AppTheme'
 
-const defaultCSSProperties: { [x: string]: CSSProperties} = {
-  card: {
-    minWidth: 275,
-    borderTopLeftRadius: '25px',
-    borderTopRightRadius: '25px',
-    marginTop: '-25px',
-    position: 'relative',
-    paddingBottom: '25px',
-  },
-  evenCard: {
-    backgroundColor: '#F3EAEC',
-  },
-  oddCard: {
-    backgroundColor: '#FAF4F0',
-  }
+type CardsProps = {
+  /** Current base currency data. */
+  baseCurrency: CurrencyData
+  /** List of currency that will be shown as list. */
+  currencies: CurrencyData[]
+  /** If `true`, loading spinner will appear. */
+  isLoading: boolean
+  /** Function to be called when user click the `clear` button. */
+  onClear: Function
+  /** Function to be called when user click the flag. */
+  onFlagClick: (currency: string, baseCurrency: CurrencyData) => void
+  /** Current value number to be converted. */
+  value: number
 }
 
 const useStyles = makeStyles(() =>
@@ -52,6 +41,12 @@ const useStyles = makeStyles(() =>
       backgroundColor: theme.palette.primary.contrastText,
       paddingBottom: '35px'
     },
+    containerOdd: {
+      backgroundColor: '#F3EAEC',
+    },
+    containerEven: {
+      backgroundColor: '#FAF4F0',
+    },
     empty: {
       display: 'flex',
       alignItems: 'center',
@@ -65,130 +60,30 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const cardStyles = makeStyles(() =>
-  createStyles({
-    box: {
-      boxSizing: 'border-box',
-      display: 'grid',
-      gridTemplateColumns: '1fr 5fr',
-      gridColumnGap: '15px',
-      alignItems: 'center'
-    },
-    flag: {
-      border: '1px solid #CCC',
-      borderRadius: '15px',
-      backgroundSize: 'cover',
-      height: '50px',
-      width: '50px',
-      padding: 0,
-      margin: 0,
-      backgroundPosition: 'center',
-      boxSizing: 'border-box'
-    },
-    subTitle: {
-      color: theme.palette.secondary.dark,
-      fontSize: '0.8em',
-      margin: '5px 0'
-    },
-    title: {
-      fontSize: '1em',
-      color: '#484848'
-    },
-    value: {
-      fontSize: '1.2em',
-      fontWeight: 700,
-      color: '#484848'
-    },
-    currencyBox: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      margin: '5px 0'
-    },
-    cardOdd: {
-      ...defaultCSSProperties.oddCard,
-      ...defaultCSSProperties.card
-    },
-    cardEven: {
-      ...defaultCSSProperties.evenCard,
-      ...defaultCSSProperties.card
-    },
-    note: {
-      fontSize: '10px',
-      fontStyle: 'italic',
-      textAlign: 'right',
-      borderTop: `2px solid ${theme.palette.divider}`
-    },
-    clearButton: {
-      position: 'absolute',
-      right: 0
-    }
-  })
-);
-
-type ElementProps = {
-  value: number
-  currency: string
-  label: string,
-  rates: number,
-  index: number,
-  flagCode: string,
-  isLastCard: boolean,
-  baseCurrency: string
-  onFlagClick: (currency: string) => void
-  onClear: Function
-}
-
-const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, onClear, onFlagClick, baseCurrency }: ElementProps) => {
-  const cardClasses = cardStyles({})
-  const formattedValue = numeral(value * rates).format(FORMAT_NUMERAL)
-  const formattedRates = numeral(rates).format(FORMAT_NUMERAL)
-  return (
-    <Card className={cardClasses[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined" style={isLastCard ? { borderBottom: 'none' } : {}}>
-      <IconButton onClick={() => onClear(currency)} className={cardClasses.clearButton}>
-        <HighlightOffIcon />
-      </IconButton>
-      <CardContent className={cardClasses.box}>
-        <IconButton onClick={() => onFlagClick(currency)} className={cardClasses.flag}>
-          <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
-        </IconButton>
-        <Box>
-          <Typography className={cardClasses.subTitle}>{ label }</Typography>
-          <Box className={cardClasses.currencyBox}>
-            <Typography className={cardClasses.title}>{ currency }</Typography>
-            <Typography className={cardClasses.value}>{ formattedValue }</Typography>
-          </Box>
-          <Typography className={cardClasses.note}>{ `1 ${baseCurrency} = ${currency} ${formattedRates}` }</Typography>
-        </Box>
-      </CardContent>
-    </Card>
-  )
-}
-
-type CardProps = {
-  currency: string
-  label: string
-  rates: number
-  flagCode: string
-}
-
-type CardsProps = {
-  value: number
-  currencies: CardProps[]
-  isLoading: boolean
-  baseCurrency: CurrencyData
-  onClear: Function
-  onFlagClick: (currency: string, baseCurrency: CurrencyData) => void
-}
-
-const Cards = ({ value, currencies, onClear, isLoading, onFlagClick, baseCurrency }: CardsProps) => {
+const Cards = ({ 
+  baseCurrency,
+  currencies, 
+  isLoading, 
+  onClear, 
+  onFlagClick, 
+  value, 
+}: CardsProps) => {
   const classes = useStyles({})
 
   return (
-    <Box component="div" className={classes.container} style={{ backgroundColor: currencies.length % 2 === 0 ? defaultCSSProperties.oddCard.backgroundColor : defaultCSSProperties.evenCard.backgroundColor }}>
+    <Box 
+      component="div" 
+      className={cn(
+        classes.container, 
+        { 
+          [classes.containerEven]: currencies.length % 2 === 0,
+          [classes.containerOdd]: currencies.length % 2 !== 0
+        }
+      )}
+    >
       {
         currencies.map((data, index) => 
-          <Element 
+          <CurrencyCard 
             label={data.label}
             currency={data.currency}
             value={value}

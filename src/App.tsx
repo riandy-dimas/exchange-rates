@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CURRENCY_LIST } from './config'
-import { CurrencyData, CurrencyList } from './types'
-
+import { CurrencyData } from './types'
 import { 
   Container,
   Fab,
@@ -13,12 +12,12 @@ import {
   ThemeProvider 
 } from '@material-ui/core/styles';
 import PostAddIcon from '@material-ui/icons/PostAdd';
-
 import theme from './utils/AppTheme'
 import { Cards, ElevationAppBar, MainCurrency, CurrencyDialog } from './components'
-import { getCurrencyRates } from './services/CurrencyService'
+import { getCurrencyRates, GetCurrencyRateResponse } from './services/CurrencyService'
+import { mapCurrencyData } from './utils/helper'
 
-const initialValue = 10.00
+const initialValue: CurrencyData['value'] = 10.00
 const initialBaseCurrency: CurrencyData = {
   currency: 'USD',
   flagCode: 'us',
@@ -26,7 +25,7 @@ const initialBaseCurrency: CurrencyData = {
   rates: 0,
   value: initialValue
 }
-const initialCurrencyList = ['IDR']
+const initialCurrencyList: CurrencyData['currency'][] = ['IDR']
 const initialCurrencyData: CurrencyData[] = CURRENCY_LIST.map(currency => ({
   label: `${currency.currency} - ${currency.label}`,
   currency: currency.currency,
@@ -58,17 +57,6 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const mapCurrencyData = (currencyList: CurrencyList[], rates: any) => {
-  const result: CurrencyData[] = currencyList.map(currency => ({
-    label: `${currency.currency} - ${currency.label}`,
-    currency: currency.currency,
-    value: initialValue,
-    rates: rates[currency.currency],
-    flagCode: currency.flagCode,
-  }))
-  return result
-}
-
 const App: React.FC = () => {
   const [baseCurrency, setBaseCurrency] = useState(initialBaseCurrency)
   const [value, setValue] = useState(initialValue)
@@ -87,25 +75,46 @@ const App: React.FC = () => {
     handleGetCurrencyData()
   }, [])
 
-  const handleCloseAddCurrencyDialog = (value: string) => {
-    if (value) {
-      setCurrencyList([...currencyList, value])
+  /**
+   * Add selected currency to the list of exchange rates while closing the dialog.
+   *
+   * @param {CurrencyData['currency']} currency The selected currency which wanted to be added.
+   */
+  const handleCloseAddCurrencyDialog = (currency: CurrencyData['currency']) => { 
+    if (currency) {
+      setCurrencyList([...currencyList, currency])
     }
     setShowAddDialog(false)
   }
 
-  const handleCloseSwitchCurrencyDialog = (value: string) => {
-    if (value) {
-      handleFlagClick(value, baseCurrency)
+  /**
+   * Switch the base currency with the selected currency while closing the dialog.
+   *
+   * @param {CurrencyData['currency']} currency The selected currency which wanted to be switched.
+   */
+  const handleCloseSwitchCurrencyDialog = (currency: CurrencyData['currency']) => { 
+    if (currency) {
+      handleFlagClick(currency, baseCurrency)
     }
     setShowSwitchDialog(false)
   }
 
-  const handleClearCurrency = (currency: string) => {
+  /**
+   * Remove selected currency from the exchange rates list.
+   *
+   * @param {CurrencyData['currency']} currency The selected currency which wanted to be removed.
+   */
+  const handleClearCurrency = (currency: CurrencyData['currency']) => { 
     setCurrencyList(currencyList.filter(c => c !== currency))
   }
 
-  const handleFlagClick = (currency: string, baseCurrency: CurrencyData) => {
+  /**
+   * Switch current base currency with selected currency.
+   *
+   * @param {CurrencyData['currency']} currency Selected currency.
+   * @param {CurrencyData} baseCurrency Current base currency data.
+   */
+  const handleFlagClick = (currency: CurrencyData['currency'], baseCurrency: CurrencyData) => {
     const filteredList = currencyList.filter(c => c !== currency)
     filteredList.push(baseCurrency.currency)
     setCurrencyList([...filteredList])
@@ -114,12 +123,17 @@ const App: React.FC = () => {
     handleGetCurrencyData(currency)
   }
 
-  const handleGetCurrencyData = (defaultBaseCurrency?: string) => {
+  /**
+   * Get exchange rates data based on the base currency
+   *
+   * @param {CurrencyData['currency']} [defaultBaseCurrency] Set the base currency of the request.
+   */
+  const handleGetCurrencyData = (defaultBaseCurrency?: CurrencyData['currency']) => { 
     setIsCurrencyLoading(true)
     getCurrencyRates({
       baseCurrency: defaultBaseCurrency || initialBaseCurrency.currency,
-      onSucceed: (rates: any) => {
-        const mappedData = mapCurrencyData(CURRENCY_LIST, rates);
+      onSucceed: (rates: GetCurrencyRateResponse['rates']) => {
+        const mappedData = mapCurrencyData(CURRENCY_LIST, initialValue, rates);
         setCurrencyData([...mappedData])
         setIsCurrencyLoading(false)
       },

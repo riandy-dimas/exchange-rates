@@ -1,19 +1,28 @@
 import axios, { AxiosResponse } from 'axios'
 import { API_PATH } from '../config'
 
-type GetCurrencyRateRequest = {
+export type GetCurrencyRateRequest = {
+  /** Current base currency code represented in three letter code of `ISO 4217`. */
   baseCurrency: string
-  onSucceed: Function
+  /** Function to be called when the request is unsuccessful. */
   onFailed: Function
+  /** Function to be called when the request is successful. */
+  onSucceed: Function
 }
 
-type GetCurrencyRateResponse = {
-  rates: any[],
-  base: string,
+export type GetCurrencyRateResponse = {
+  /** Base currency code represented in three letter code of `ISO 4217`. */
+  base: string
+  /** The effective date of the data, typed in format `YYYY-MM-DD`. */
   date: string
+  /** List of currency data rates. */
+  rates: {
+    /** Three letter currency code based on `ISO 4217` accompanied by its value. */
+    [currencyCode: string]: number
+  }
 }
 
-const getCurrencyRates = ({
+export const getCurrencyRates = ({
   baseCurrency,
   onSucceed,
   onFailed
@@ -21,23 +30,16 @@ const getCurrencyRates = ({
   axios
     // The API we're requesting data from
     .get(API_PATH.GET_CURRENCY_RATES 
-      + `?base=${baseCurrency}` 
-      // + `?symbols=${targetCurrencies.join(',')}`
+      + `?base=${baseCurrency}`
     )
-    // Once we get a response, we'll map the API endpoints to our props
-    .then((response: AxiosResponse<GetCurrencyRateResponse>) =>
-      response.data
-    )
-    // Let's make sure to change the loading state to display the data
-    .then(currencies => {
-      const { rates } = currencies
+    // Once we get a response, we'll send the data using `onSucceed()`
+    .then((response: AxiosResponse<GetCurrencyRateResponse>) => {
+      const { rates } = response.data
       onSucceed(rates)
     })
-    // We can still use the `.catch()` method since axios is promise-based
+    // Use the `.catch()` method if error happened and also call `onFailed()`
     .catch(error => {
       console.error(error)
       onFailed()
     });
 }
-
-export { getCurrencyRates }
