@@ -19,13 +19,21 @@ import {
 } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 
-const defaultCard: CSSProperties = {
-  minWidth: 275,
-  borderTopLeftRadius: '25px',
-  borderTopRightRadius: '25px',
-  marginTop: '-25px',
-  position: 'relative',
-  paddingBottom: '25px'
+const defaultCSSProperties: { [x: string]: CSSProperties} = {
+  card: {
+    minWidth: 275,
+    borderTopLeftRadius: '25px',
+    borderTopRightRadius: '25px',
+    marginTop: '-25px',
+    position: 'relative',
+    paddingBottom: '25px',
+  },
+  evenCard: {
+    backgroundColor: '#F3EAEC',
+  },
+  oddCard: {
+    backgroundColor: '#FAF4F0',
+  }
 }
 
 const theme = createMuiTheme({
@@ -51,12 +59,12 @@ const useStyles = makeStyles(() =>
       backgroundColor: theme.palette.primary.contrastText
     },
     cardOdd: {
-      backgroundColor: '#FAF4F0',
-      ...defaultCard
+      ...defaultCSSProperties.oddCard,
+      ...defaultCSSProperties.card
     },
     cardEven: {
-      backgroundColor: '#F3EAEC',
-      ...defaultCard
+      ...defaultCSSProperties.evenCard,
+      ...defaultCSSProperties.card
     },
     bullet: {
       display: 'inline-block',
@@ -85,19 +93,22 @@ const cardStyles = makeStyles(() =>
       border: '1px solid #CCC',
       borderRadius: '15px',
       backgroundSize: 'cover',
-      height: '40px'
+      height: '40px',
+      backgroundPosition: 'center'
     },
     subTitle: {
-      color: theme.palette.secondary.main,
+      color: theme.palette.secondary.dark,
       fontSize: '0.8em',
       margin: '5px 0'
     },
     title: {
-      fontSize: '1em'
+      fontSize: '1em',
+      color: '#484848'
     },
     value: {
       fontSize: '1.2em',
-      fontWeight: 700
+      fontWeight: 700,
+      color: '#484848'
     },
     currencyBox: {
       display: 'flex',
@@ -114,23 +125,24 @@ type ElementProps = {
   label: string,
   rates: number,
   index: number,
-  flagCode: string
+  flagCode: string,
+  isLastCard: boolean
 }
 
-const Element = ({ label, currency, value, rates, index, flagCode }: ElementProps) => {
+const Element = ({ label, currency, value, rates, index, flagCode, isLastCard }: ElementProps) => {
   const formatNumeral = '0,0.00'
   const classes = useStyles({})
   const cardClasses = cardStyles({})
   const formattedValue = numeral(value * rates).format(formatNumeral)
   return (
-    <Card className={classes[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined">
+    <Card className={classes[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined" style={isLastCard ? { borderBottom: 'none' } : {}}>
       <CardContent className={cardClasses.box}>
         <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
         <Box>
           <Typography className={cardClasses.subTitle}>{ label }</Typography>
           <Box className={cardClasses.currencyBox}>
             <Typography className={cardClasses.title}>{ currency }</Typography>
-            <Typography>{ formattedValue }</Typography>
+            <Typography className={cardClasses.value}>{ formattedValue }</Typography>
           </Box>
         </Box>
       </CardContent>
@@ -154,7 +166,7 @@ const Cards = ({ value, currencies }: CardsProps) => {
   const classes = useStyles({})
 
   return (
-    <Box component="div" className={classes.container}>
+    <Box component="div" className={classes.container} style={{ backgroundColor: currencies.length % 2 === 0 ? defaultCSSProperties.oddCard.backgroundColor : defaultCSSProperties.evenCard.backgroundColor }}>
       {
         currencies.map((data, index) => 
           <Element 
@@ -165,6 +177,7 @@ const Cards = ({ value, currencies }: CardsProps) => {
             flagCode={data.flagCode}
             key={index}
             index={index}
+            isLastCard={index === currencies.length - 1}
           />
         )
       }

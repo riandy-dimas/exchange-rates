@@ -42,7 +42,8 @@ const useStyles = makeStyles(() =>
       boxShadow: 'inset 2px 0px 0px #333',
       borderRadius: '15px',
       backgroundSize: 'cover',
-      height: '40px'
+      height: '40px',
+      backgroundPosition: 'center'
     },
     subTitle: {
       color: theme.palette.secondary.main,
