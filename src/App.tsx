@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 import { 
@@ -14,7 +14,7 @@ import {
   ThemeProvider 
 } from '@material-ui/core/styles';
 
-import { ElevationAppBar } from './components'
+import { ElevationAppBar, MainCurrency } from './components'
 
 const theme = createMuiTheme({
   palette: {
@@ -37,19 +37,12 @@ const useStyles = makeStyles(() =>
     },
     container: {
       backgroundColor: theme.palette.primary.main
-    },
-    box: {
-      height: '100px',
-      border: `1px dashed ${theme.palette.primary.contrastText}`,
-      borderRadius: '20px',
-      padding: '15px',
-      boxSizing: 'border-box',
-      margin: '30px 0',
-    },
+    }
   })
 );
 
 const App: React.FC = () => {
+  const [value, setValue] = useState(10.00)
   const classes = useStyles();
 
   return (
@@ -58,9 +51,12 @@ const App: React.FC = () => {
         <ElevationAppBar title="Exchange Rates" />
         <Toolbar />
         <Container maxWidth="md" className={classes.container}>
-          <Typography component="div" className={classes.box}>
-            Lorem ipsum dolore
-          </Typography>
+          <MainCurrency 
+            currency="USD"
+            label="USD - United States Dollar"
+            value={value}
+            onChange={setValue}
+          />
         </Container>
       </ThemeProvider>
     </div>
