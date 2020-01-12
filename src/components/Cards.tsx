@@ -51,32 +51,20 @@ const useStyles = makeStyles(() =>
   createStyles({
     container: {
       overflow: 'auto',
-      marginTop: '50px',
-      minHeight: 'calc(100vh - 231px)',
+      marginTop: '30px',
+      height: 'calc(100vh - 246px)',
       paddingTop: '25px',
       borderTopLeftRadius: '25px',
       borderTopRightRadius: '25px',
-      backgroundColor: theme.palette.primary.contrastText
+      backgroundColor: theme.palette.primary.contrastText,
+      paddingBottom: '35px'
     },
-    cardOdd: {
-      ...defaultCSSProperties.oddCard,
-      ...defaultCSSProperties.card
-    },
-    cardEven: {
-      ...defaultCSSProperties.evenCard,
-      ...defaultCSSProperties.card
-    },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
-    },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
-      marginBottom: 12,
-    },
+    empty: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: "#484848"
+    }
   }),
 );
 
@@ -94,7 +82,8 @@ const cardStyles = makeStyles(() =>
       borderRadius: '15px',
       backgroundSize: 'cover',
       height: '40px',
-      backgroundPosition: 'center'
+      backgroundPosition: 'center',
+      boxSizing: 'border-box'
     },
     subTitle: {
       color: theme.palette.secondary.dark,
@@ -115,7 +104,21 @@ const cardStyles = makeStyles(() =>
       justifyContent: 'space-between',
       alignItems: 'center',
       margin: '5px 0'
-    }
+    },
+    cardOdd: {
+      ...defaultCSSProperties.oddCard,
+      ...defaultCSSProperties.card
+    },
+    cardEven: {
+      ...defaultCSSProperties.evenCard,
+      ...defaultCSSProperties.card
+    },
+    note: {
+      fontSize: '10px',
+      fontStyle: 'italic',
+      textAlign: 'right',
+      borderTop: `2px solid ${theme.palette.divider}`
+    },
   })
 );
 
@@ -131,11 +134,11 @@ type ElementProps = {
 
 const Element = ({ label, currency, value, rates, index, flagCode, isLastCard }: ElementProps) => {
   const formatNumeral = '0,0.00'
-  const classes = useStyles({})
   const cardClasses = cardStyles({})
   const formattedValue = numeral(value * rates).format(formatNumeral)
+  const formattedRates = numeral(rates).format(formatNumeral)
   return (
-    <Card className={classes[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined" style={isLastCard ? { borderBottom: 'none' } : {}}>
+    <Card className={cardClasses[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined" style={isLastCard ? { borderBottom: 'none' } : {}}>
       <CardContent className={cardClasses.box}>
         <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
         <Box>
@@ -144,6 +147,7 @@ const Element = ({ label, currency, value, rates, index, flagCode, isLastCard }:
             <Typography className={cardClasses.title}>{ currency }</Typography>
             <Typography className={cardClasses.value}>{ formattedValue }</Typography>
           </Box>
+          <Typography className={cardClasses.note}>{ `1 USD = ${currency} ${formattedRates}` }</Typography>
         </Box>
       </CardContent>
     </Card>
@@ -180,6 +184,12 @@ const Cards = ({ value, currencies }: CardsProps) => {
             isLastCard={index === currencies.length - 1}
           />
         )
+      }
+      {
+        currencies.length === 0 &&
+        <Typography variant="h6" className={classes.empty}>
+          Let's start with adding a currency!
+        </Typography>
       }
     </Box>
   )

@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 
 import { 
-  Box,
   Container,
+  Fab,
   Toolbar, 
-  Typography
 } from '@material-ui/core';
 import { 
   createMuiTheme,
@@ -13,8 +12,9 @@ import {
   makeStyles,
   ThemeProvider 
 } from '@material-ui/core/styles';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
-import { Cards, ElevationAppBar, MainCurrency } from './components'
+import { Cards, ElevationAppBar, MainCurrency, AddCurrencyDialog } from './components'
 
 const theme = createMuiTheme({
   palette: {
@@ -37,44 +37,109 @@ const useStyles = makeStyles(() =>
     },
     container: {
       backgroundColor: theme.palette.primary.main,
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
+    },
+    fab: {
+      position: "fixed",
+      bottom: '20px',
+      left: '50%',
+      transform: 'translateX(-50%)'
     }
   })
 );
 
 const App: React.FC = () => {
   const [value, setValue] = useState(10.00)
+  const [showAddDialog, setShowAddDialog] = useState(false)
+  const [currencyList, setCurrencyList] = useState(['IDR'])
   const classes = useStyles();
 
-  const currencies = [
+  type CurrencyProps = {
+    currency: string
+    label: string
+    flagCode: string
+  }
+
+  const addCurrencyList: CurrencyProps[] = [
     {
-      label: 'IDR - Indonesian Rupiah',
+      currency: 'USD',
+      label: 'United States dollar',
+      flagCode: 'us',
+    },
+    {
+      currency: 'CAD',
+      label: 'Canadian dollar',
+      flagCode: 'ca',
+    },
+    {
       currency: 'IDR',
-      value,
-      rates: 13000,
-      flagCode: 'id'
+      label: 'Indonesian rupiah',
+      flagCode: 'id',
     },
     {
-      label: 'MYR - Malaysian Ringgit',
-      currency: 'MYR',
-      value,
-      rates: 2400,
-      flagCode: 'my'
+      currency: 'GBP',
+      label: 'Pound sterling',
+      flagCode: 'gb',
     },
     {
-      label: 'INR - Indian Rupee',
+      currency: 'CHF',
+      label: 'Swiss franc',
+      flagCode: 'ch',
+    },
+    {
+      currency: 'SGD',
+      label: 'Singapore dollar',
+      flagCode: 'sg',
+    },
+    {
       currency: 'INR',
-      value,
-      rates: 1424,
-      flagCode: 'in'
+      label: 'Indian rupee',
+      flagCode: 'in',
     },
     {
-      label: 'JPY - Japanese Yen',
+      currency: 'MYR',
+      label: 'Malaysian ringgit',
+      flagCode: 'my',
+    },
+    {
       currency: 'JPY',
-      value,
-      rates: 123,
-      flagCode: 'jp'
-    }
+      label: 'Japanese yen',
+      flagCode: 'jp',
+    },
+    {
+      currency: 'KRW',
+      label: 'South Korean won',
+      flagCode: 'kr',
+    },
   ]
+
+  type CurrencyData = {
+    label: string
+    currency: string
+    value: number
+    rates: number
+    flagCode: string
+  }
+
+  const currenciesData: CurrencyData[] = addCurrencyList.map(currency => ({
+    label: `${currency.currency} - ${currency.label}`,
+    currency: currency.currency,
+    value,
+    rates: Math.random() * 1000,
+    flagCode: currency.flagCode,
+  }))
+
+  const currencies = currenciesData.filter(currencyData => currencyList.indexOf(currencyData.currency) > -1)
+  const filteredAddCurrencyList = addCurrencyList.filter(currency => currencyList.indexOf(currency.currency) === -1)
+
+  const handleCloseAddCurrencyDialog = (value: string) => {
+    if (value) {
+      setCurrencyList([...currencyList, value])
+    }
+    setShowAddDialog(false)
+  }
 
   return (
     <div className={classes.root}>
@@ -96,7 +161,16 @@ const App: React.FC = () => {
             value={value}
             currencies={currencies}
           />
+          <Fab color="primary" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
+            <PostAddIcon className={classes.extendedIcon} />
+            Add Currency
+          </Fab>
         </Container>
+        <AddCurrencyDialog 
+          open={showAddDialog}
+          onClose={handleCloseAddCurrencyDialog}
+          currencies={filteredAddCurrencyList}
+        />
       </ThemeProvider>
     </div>
   );

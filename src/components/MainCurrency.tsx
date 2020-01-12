@@ -43,7 +43,8 @@ const useStyles = makeStyles(() =>
       borderRadius: '15px',
       backgroundSize: 'cover',
       height: '40px',
-      backgroundPosition: 'center'
+      backgroundPosition: 'center',
+      boxSizing: 'border-box'
     },
     subTitle: {
       color: theme.palette.secondary.main,
