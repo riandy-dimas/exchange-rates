@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Exchange Rates",
+  "name": "World Currency Exchange Rates",
   "icons": [
     {
       "src": "favicon.ico",
