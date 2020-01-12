@@ -7,23 +7,12 @@ import {
   Input,
 } from '@material-ui/core';
 import { 
-  createMuiTheme,
   createStyles,
   makeStyles
 } from '@material-ui/core/styles';
 
 import { FlagIcon } from './FlagIcon'
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#832232'
-    },
-    secondary: {
-      main: '#CE8964'
-    }
-  }
-})
+import theme from '../utils/AppTheme'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -70,14 +59,14 @@ const useStyles = makeStyles(() =>
   })
 );
 
-type Props = {
+type MainCurrencyProps = {
   value: number
   currency: string
   label: string
   onChange: Function
 }
 
-const MainCurrency = ({ value, currency, label, onChange }: Props) => {
+const MainCurrency = ({ value, currency, label, onChange }: MainCurrencyProps) => {
   const formatNumeral = '0,0.00'
   const [isFocused, setIsFocused] = useState(false)
   const classes = useStyles({});
@@ -101,8 +90,7 @@ const MainCurrency = ({ value, currency, label, onChange }: Props) => {
           <Typography className={classes.title}>{ currency }</Typography>
           <Input 
             value={isFocused ? value : localeValue} 
-            color="secondary" 
-            disableUnderline={!isFocused}
+            color="primary" 
             onChange={handleChange} 
             className={classes.value}
             inputProps={{

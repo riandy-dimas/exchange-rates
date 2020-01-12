@@ -11,12 +11,13 @@ import {
   Typography,
 } from '@material-ui/core';
 import {
-  createMuiTheme,
   createStyles,
   makeStyles
 } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+
+import theme from '../utils/AppTheme'
 
 const defaultCSSProperties: { [x: string]: CSSProperties} = {
   card: {
@@ -34,17 +35,6 @@ const defaultCSSProperties: { [x: string]: CSSProperties} = {
     backgroundColor: '#FAF4F0',
   }
 }
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#832232'
-    },
-    secondary: {
-      main: '#CE8964'
-    }
-  }
-})
 
 const useStyles = makeStyles(() =>
   createStyles({

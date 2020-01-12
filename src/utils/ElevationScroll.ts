@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactElement
 }
 
-export function ElevationScroll(props: Props) {
+export default function ElevationScroll(props: Props) {
   const { children, window } = props;
 
   const trigger = useScrollTrigger({

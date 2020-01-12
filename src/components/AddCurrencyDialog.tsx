@@ -17,19 +17,19 @@ const useStyles = makeStyles(() =>
   })
 );
 
-type Currency = {
+type CurrencyProps = {
   currency: string
   label: string
   flagCode: string
 }
 
-type Props = {
+type AddCurrencyDialogProps = {
   onClose: Function
   open: boolean
-  currencies: Currency[]
+  currencies: CurrencyProps[]
 }
 
-const AddCurrencyDialog = (props: Props) => {
+const AddCurrencyDialog = (props: AddCurrencyDialogProps) => {
   const classes = useStyles()
   const { onClose, open, currencies } = props;
 

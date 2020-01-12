@@ -7,14 +7,15 @@ import {
 import { 
   createStyles,
   makeStyles,
-  Theme,
 } from '@material-ui/core/styles';
+
+import theme from '../utils/AppTheme'
 
 
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import { ElevationScroll } from './ElevationScroll'
+import ElevationScroll from '../utils/ElevationScroll'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     title: {
       flexGrow: 1,
@@ -25,12 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-type Props = {
+type ElevationAppBarProps = {
   /** Title of the AppBar */
   title: string
 }
 
-const ElevationAppBar: React.FC<Props> = ({ title }) => {
+const ElevationAppBar: React.FC<ElevationAppBarProps> = ({ title }) => {
   const classes = useStyles()
 
   return (
