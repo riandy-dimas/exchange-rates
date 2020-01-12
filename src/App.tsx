@@ -14,7 +14,7 @@ import {
   ThemeProvider 
 } from '@material-ui/core/styles';
 
-import { ElevationAppBar, MainCurrency } from './components'
+import { Cards, ElevationAppBar, MainCurrency } from './components'
 
 const theme = createMuiTheme({
   palette: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles(() =>
       color: theme.palette.primary.contrastText
     },
     container: {
-      backgroundColor: theme.palette.primary.main
+      backgroundColor: theme.palette.primary.main,
     }
   })
 );
@@ -45,17 +45,56 @@ const App: React.FC = () => {
   const [value, setValue] = useState(10.00)
   const classes = useStyles();
 
+  const currencies = [
+    {
+      label: 'IDR - Indonesian Rupiah',
+      currency: 'IDR',
+      value,
+      rates: 13000,
+      flagCode: 'id'
+    },
+    {
+      label: 'MYR - Malaysian Ringgit',
+      currency: 'MYR',
+      value,
+      rates: 2400,
+      flagCode: 'my'
+    },
+    {
+      label: 'INR - Indian Rupee',
+      currency: 'INR',
+      value,
+      rates: 1424,
+      flagCode: 'in'
+    },
+    {
+      label: 'JPY - Japanese Yen',
+      currency: 'JPY',
+      value,
+      rates: 123,
+      flagCode: 'jp'
+    }
+  ]
+
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>
         <ElevationAppBar title="Exchange Rates" />
         <Toolbar />
-        <Container maxWidth="md" className={classes.container}>
+        <Container 
+          maxWidth="sm" 
+          className={classes.container}
+          disableGutters
+        >
           <MainCurrency 
             currency="USD"
             label="USD - United States Dollar"
             value={value}
             onChange={setValue}
+          />
+          <Cards 
+            value={value}
+            currencies={currencies}
           />
         </Container>
       </ThemeProvider>

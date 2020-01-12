@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
       borderRadius: '20px',
       padding: '10px 20px',
       boxSizing: 'border-box',
-      margin: '20px 0',
+      margin: '20px 7%',
       display: 'grid',
       gridTemplateColumns: '1fr 5fr',
       gridColumnGap: '15px',
@@ -88,7 +88,7 @@ const MainCurrency = ({ value, currency, label, onChange }: Props) => {
   }
 
   return (
-    <Box component="div" className={classes.box}>
+    <Box component="div" className={classes.box} style={{ borderStyle: isFocused ? 'solid' : 'dashed' }}>
       <FlagIcon code={'us'} className={classes.flag} size='2x' />
       <Box>
         <Typography className={classes.subTitle}>{ label }</Typography>
