@@ -19,9 +19,15 @@ import { Cards, ElevationAppBar, MainCurrency, AddCurrencyDialog } from './compo
 import { getCurrencyRates } from './services/CurrencyService'
 
 const initialValue = 10.00
-const initialBaseCurrency = 'USD'
-
-const initialCurrenciesData: CurrencyData[] = CURRENCY_LIST.map(currency => ({
+const initialBaseCurrency: CurrencyData = {
+  currency: 'USD',
+  flagCode: 'us',
+  label: 'USD - United States dollar',
+  rates: 0,
+  value: initialValue
+}
+const initialCurrencyList = ['IDR']
+const initialCurrencyData: CurrencyData[] = CURRENCY_LIST.map(currency => ({
   label: `${currency.currency} - ${currency.label}`,
   currency: currency.currency,
   value: initialValue,
@@ -64,10 +70,11 @@ const mapCurrencyData = (currencyList: CurrencyList[], rates: any) => {
 }
 
 const App: React.FC = () => {
+  const [baseCurrency, setBaseCurrency] = useState(initialBaseCurrency)
   const [value, setValue] = useState(initialValue)
   const [showAddDialog, setShowAddDialog] = useState(false)
-  const [currencyList, setCurrencyList] = useState(['IDR'])
-  const [currencyData, setCurrencyData] = useState(initialCurrenciesData)
+  const [currencyList, setCurrencyList] = useState(initialCurrencyList)
+  const [currencyData, setCurrencyData] = useState(initialCurrencyData)
   const [isCurrencyLoading, setIsCurrencyLoading] = useState(false)
   const classes = useStyles();
 
@@ -89,10 +96,20 @@ const App: React.FC = () => {
     setCurrencyList(currencyList.filter(c => c !== currency))
   }
 
-  const handleGetCurrencyData = () => {
+  const handleFlagClick = (currency: CurrencyData, baseCurrency: CurrencyData) => {
+    const filteredList = currencyList.filter(c => c !== currency.currency)
+    filteredList.push(baseCurrency.currency)
+    console.log('kkkkkkk', [...filteredList], baseCurrency)
+    setCurrencyList([...filteredList])
+    setBaseCurrency(currency)
+
+    handleGetCurrencyData(currency.currency)
+  }
+
+  const handleGetCurrencyData = (defaultBaseCurrency?: string) => {
     setIsCurrencyLoading(true)
     getCurrencyRates({
-      baseCurrency: initialBaseCurrency,
+      baseCurrency: defaultBaseCurrency || initialBaseCurrency.currency,
       onSucceed: (rates: any) => {
         const mappedData = mapCurrencyData(CURRENCY_LIST, rates);
         setCurrencyData([...mappedData])
@@ -104,6 +121,7 @@ const App: React.FC = () => {
     })
   }
 
+  const mainCurrency: CurrencyData = currencyData.find(currency => currency.currency === baseCurrency.currency) || initialBaseCurrency
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>
@@ -115,17 +133,20 @@ const App: React.FC = () => {
           disableGutters
         >
           <MainCurrency 
-            currency="USD"
-            label="USD - United States Dollar"
+            currency={mainCurrency.currency}
+            label={mainCurrency.label}
             value={value}
             onChange={setValue}
             onBlur={() => {}}
+            flagCode={mainCurrency.flagCode}
           />
           <Cards 
             value={value}
             currencies={currencies}
             onClear={handleClearCurrency}
             isLoading={isCurrencyLoading}
+            onFlagClick={handleFlagClick}
+            baseCurrency={baseCurrency}
           />
           <Fab color="primary" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
             <PostAddIcon className={classes.extendedIcon} />

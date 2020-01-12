@@ -1,5 +1,7 @@
 import React from 'react'
 import numeral from 'numeral'
+import { CurrencyData } from '../types'
+import { FORMAT_NUMERAL } from '../config'
 
 import { FlagIcon } from './FlagIcon'
 
@@ -76,7 +78,10 @@ const cardStyles = makeStyles(() =>
       border: '1px solid #CCC',
       borderRadius: '15px',
       backgroundSize: 'cover',
-      height: '40px',
+      height: '50px',
+      width: '50px',
+      padding: 0,
+      margin: 0,
       backgroundPosition: 'center',
       boxSizing: 'border-box'
     },
@@ -129,21 +134,23 @@ type ElementProps = {
   index: number,
   flagCode: string,
   isLastCard: boolean,
+  onFlagClick: (currency: CurrencyData) => void
   onClear: Function
 }
 
-const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, onClear }: ElementProps) => {
-  const formatNumeral = '0,0.00'
+const Element = ({ label, currency, value, rates, index, flagCode, isLastCard, onClear, onFlagClick }: ElementProps) => {
   const cardClasses = cardStyles({})
-  const formattedValue = numeral(value * rates).format(formatNumeral)
-  const formattedRates = numeral(rates).format(formatNumeral)
+  const formattedValue = numeral(value * rates).format(FORMAT_NUMERAL)
+  const formattedRates = numeral(rates).format(FORMAT_NUMERAL)
   return (
     <Card className={cardClasses[index % 2 === 0? 'cardEven' : 'cardOdd']} variant="outlined" style={isLastCard ? { borderBottom: 'none' } : {}}>
       <IconButton onClick={() => onClear(currency)} className={cardClasses.clearButton}>
         <HighlightOffIcon />
       </IconButton>
       <CardContent className={cardClasses.box}>
-        <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
+        <IconButton onClick={() => onFlagClick({ currency, label, value, rates, flagCode })} className={cardClasses.flag}>
+          <FlagIcon code={flagCode} className={cardClasses.flag} size='2x' />
+        </IconButton>
         <Box>
           <Typography className={cardClasses.subTitle}>{ label }</Typography>
           <Box className={cardClasses.currencyBox}>
@@ -168,10 +175,12 @@ type CardsProps = {
   value: number
   currencies: CardProps[]
   isLoading: boolean
+  baseCurrency: CurrencyData
   onClear: Function
+  onFlagClick: (currency: CurrencyData, baseCurrency: CurrencyData) => void
 }
 
-const Cards = ({ value, currencies, onClear, isLoading }: CardsProps) => {
+const Cards = ({ value, currencies, onClear, isLoading, onFlagClick, baseCurrency }: CardsProps) => {
   const classes = useStyles({})
 
   return (
@@ -188,6 +197,7 @@ const Cards = ({ value, currencies, onClear, isLoading }: CardsProps) => {
             index={index}
             isLastCard={index === currencies.length - 1}
             onClear={onClear}
+            onFlagClick={(currency: CurrencyData) => onFlagClick(currency, baseCurrency)}
           />
         )
       }

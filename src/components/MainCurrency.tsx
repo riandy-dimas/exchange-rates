@@ -13,6 +13,7 @@ import {
 
 import { FlagIcon } from './FlagIcon'
 import theme from '../utils/AppTheme'
+import { FORMAT_NUMERAL } from '../config'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -63,29 +64,29 @@ type MainCurrencyProps = {
   value: number
   currency: string
   label: string
+  flagCode: string
   onChange: Function
   onBlur: Function
 }
 
-const MainCurrency = ({ value, currency, label, onBlur, onChange }: MainCurrencyProps) => {
-  const formatNumeral = '0,0.00'
+const MainCurrency = ({ value, currency, label, onBlur, onChange, flagCode }: MainCurrencyProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const classes = useStyles({});
-  const localeValue = numeral(value).format(formatNumeral)
+  const localeValue = numeral(value).format(FORMAT_NUMERAL)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
 
   const handleBlur = (value: number) => {
-    onChange(numeral(numeral(value).format(formatNumeral)).value())
+    onChange(numeral(numeral(value).format(FORMAT_NUMERAL)).value())
     onBlur()
     setIsFocused(false)
   }
 
   return (
     <Paper variant="elevation" component="div" className={classes.box} style={{ borderStyle: isFocused ? 'solid' : 'dashed' }}>
-      <FlagIcon code={'us'} className={classes.flag} size='2x' />
+      <FlagIcon code={flagCode} className={classes.flag} size='2x' />
       <Box>
         <Typography className={classes.subTitle}>{ label }</Typography>
         <Box className={classes.currencyBox}>
