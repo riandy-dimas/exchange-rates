@@ -115,6 +115,7 @@ const MainCurrency = ({
               }
             }}
             onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
           />
         </Box>
       </Box>
