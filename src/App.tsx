@@ -170,7 +170,7 @@ const App: React.FC = () => {
             onFlagClick={handleFlagClick}
             baseCurrency={baseCurrency}
           />
-          <Fab color="primary" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
+          <Fab color="primary" data-testid="addCurrency" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
             <PostAddIcon className={classes.extendedIcon} />
             Add Currency
           </Fab>

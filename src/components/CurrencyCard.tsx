@@ -137,7 +137,7 @@ const CurrencyCard = ({
       )} 
       variant="outlined"
     >
-      <IconButton onClick={() => onClear(currency)} className={classes.clearButton}>
+      <IconButton data-testid={`removeCurrency${currency}`} onClick={() => onClear(currency)} className={classes.clearButton}>
         <HighlightOffIcon />
       </IconButton>
       <CardContent className={classes.box}>

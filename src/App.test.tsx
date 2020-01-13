@@ -9,8 +9,15 @@ test('renders initial currency', () => {
 });
 
 test('renders dialog on add', () => {
-  const { getByText } = render(<App />);
-  fireEvent.click(getByText(/ADD CURRENCY/i))
+  const { getByText, getByTestId } = render(<App />);
+  fireEvent.click(getByTestId(/addCurrency/))
   const addDialogElement = getByText(/Add currency:/i);
   expect(addDialogElement).toBeInTheDocument();
+});
+
+test('renders empty list', () => {
+  const { getByText, getByTestId } = render(<App />);
+  fireEvent.click(getByTestId(/removeCurrencyIDR/))
+  const emptyElement = getByText(/Let\'s start with adding a currency!/i);
+  expect(emptyElement).toBeInTheDocument();
 });
