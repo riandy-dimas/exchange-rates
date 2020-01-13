@@ -14,7 +14,7 @@ A web application which let you convert and displays several currency rates. Cur
 
 ### Deployment
 
-Currently this web application deployed and can be accessed on [Exchange Rates](https://exchange-rate.netlify.com/).
+Currently this web application is automatically deployed and can be accessed on [Exchange Rates](https://exchange-rate.netlify.com/).
 
 ---
 
