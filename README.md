@@ -14,7 +14,11 @@ A web application which let you convert and displays several currency rates. Cur
 
 ### Deployment
 
-Currently this web application is automatically deployed and can be accessed on [Exchange Rates](https://exchange-rate.netlify.com/).
+This web application is automatically deployed, hosted using [Netlify](https://netlify.com) and can be accessed on [this link](https://exchange-rate.netlify.com/).
+
+### API
+
+Rates data are used from https://exchangeratesapi.io/.
 
 ---
 
