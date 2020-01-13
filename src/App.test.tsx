@@ -15,6 +15,13 @@ test('renders dialog on add', () => {
   expect(addDialogElement).toBeInTheDocument();
 });
 
+test('renders dialog on switch', () => {
+  const { getByText, getByTestId } = render(<App />);
+  fireEvent.click(getByTestId(/mainCurrencyFlag/))
+  const switchDialogElement = getByText(/Change currency:/i);
+  expect(switchDialogElement).toBeInTheDocument();
+});
+
 test('renders empty list', () => {
   const { getByText, getByTestId } = render(<App />);
   fireEvent.click(getByTestId(/removeCurrencyIDR/))

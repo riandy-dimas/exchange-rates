@@ -95,7 +95,7 @@ const MainCurrency = ({
 
   return (
     <Paper variant="elevation" component="div" className={classes.box} style={{ borderStyle: isFocused ? 'solid' : 'dashed' }}>
-        <IconButton onClick={() => onFlagClick(currency)} className={classes.flag}>
+        <IconButton data-testid="mainCurrencyFlag" onClick={() => onFlagClick(currency)} className={classes.flag}>
           <FlagIcon code={flagCode} className={classes.flag} size='2x' />
         </IconButton>      
         <Box>
