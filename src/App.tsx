@@ -179,13 +179,13 @@ const App: React.FC = () => {
           open={showAddDialog}
           onClose={handleCloseAddCurrencyDialog}
           currencies={filteredAddCurrencyList}
-          title="Add currency"
+          title="Add currency:"
         />
         <CurrencyDialog 
           open={showSwitchDialog}
           onClose={handleCloseSwitchCurrencyDialog}
           currencies={filteredSwitchCurrencyList}
-          title="Change currency"
+          title="Change currency:"
         />
       </ThemeProvider>
     </div>
