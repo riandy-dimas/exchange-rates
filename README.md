@@ -15,7 +15,7 @@ A web application which let you convert and displays several currency rates. Cur
 ### How to Use
 
 1. Just simply type the number value you want to convert in the main panel of the app. 
-2. If you want to add a currency to convert on click the `Add Currency` button at the bottom of the screen.
+2. If you want to add a currency to convert, click the `Add Currency` button at the bottom of the screen.
 3. You can also switch/change the base currency by clicking the flag icon in the main panel.
 4. If you want to swap the currency immediately, you can click at one of the flag icon in the currency list.
 5. There is also `x` or clear button on the right of a currency panel if you want to remove the selected currency from the list.
