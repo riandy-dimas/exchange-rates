@@ -7,6 +7,7 @@ import {
   Box,
   CircularProgress,
   Typography,
+  ButtonBase,
 } from '@material-ui/core';
 import {
   createStyles,
@@ -25,6 +26,8 @@ type CardsProps = {
   onClear: Function
   /** Function to be called when user click the flag. */
   onFlagClick: (currency: string, baseCurrency: CurrencyData) => void
+  /** Function to be called when pick a currency card. */
+  onPickCard: (currency: string) => void,
   /** Current value number to be converted. */
   value: number
 }
@@ -66,6 +69,7 @@ const Cards = ({
   isLoading, 
   onClear, 
   onFlagClick, 
+  onPickCard,
   value, 
 }: CardsProps) => {
   const classes = useStyles({})
@@ -83,19 +87,29 @@ const Cards = ({
     >
       {
         currencies.map((data, index) => 
-          <CurrencyCard 
-            label={data.label}
-            currency={data.currency}
-            value={value}
-            rates={data.rates}
-            flagCode={data.flagCode}
+          <ButtonBase
             key={index}
-            index={index}
-            isLastCard={index === currencies.length - 1}
-            onClear={onClear}
-            onFlagClick={(currency: string) => onFlagClick(currency, baseCurrency)}
-            baseCurrency={baseCurrency.currency}
-          />
+            focusRipple
+            style={{
+              width: '100%',
+              paddingBottom: '25px',
+              marginTop: '-25px',
+            }}
+            onClick={() => onPickCard(data.currency)}
+          >
+            <CurrencyCard 
+              label={data.label}
+              currency={data.currency}
+              value={value}
+              rates={data.rates}
+              flagCode={data.flagCode}
+              index={index}
+              isLastCard={index === currencies.length - 1}
+              onClear={onClear}
+              onFlagClick={(currency: string) => onFlagClick(currency, baseCurrency)}
+              baseCurrency={baseCurrency.currency}
+            />
+          </ButtonBase>
         )
       }
       {

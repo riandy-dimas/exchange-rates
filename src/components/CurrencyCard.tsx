@@ -16,6 +16,7 @@ import {
   makeStyles,
 } from '@material-ui/core/styles';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import { HistoricalChart } from '../components';
 
 type CurrencyCardProps = {
   /** Current base currency code represented in three letter code of `ISO 4217`. */
@@ -46,6 +47,7 @@ const useStyles = makeStyles(() =>
       boxSizing: 'border-box',
       display: 'grid',
       gridTemplateColumns: '1fr 5fr',
+      gridTemplateRows: '1fr 1fr',
       gridColumnGap: '15px',
       alignItems: 'center'
     },
@@ -63,7 +65,8 @@ const useStyles = makeStyles(() =>
     subTitle: {
       color: theme.palette.secondary.dark,
       fontSize: '0.8em',
-      margin: '5px 0'
+      margin: '5px 0',
+      textAlign: 'left',
     },
     title: {
       fontSize: '1em',
@@ -84,9 +87,8 @@ const useStyles = makeStyles(() =>
       minWidth: 275,
       borderTopLeftRadius: '25px',
       borderTopRightRadius: '25px',
-      marginTop: '-25px',
       position: 'relative',
-      paddingBottom: '25px',
+      width: '110%',
     },
     cardOdd: {
       backgroundColor: '#FAF4F0',
@@ -153,6 +155,7 @@ const CurrencyCard = ({
           <Typography className={classes.note}>{ `1 ${baseCurrency} = ${currency} ${formattedRates}` }</Typography>
         </Box>
       </CardContent>
+      <HistoricalChart />
     </Card>
   )
 }

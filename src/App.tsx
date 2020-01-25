@@ -65,6 +65,7 @@ const App: React.FC = () => {
   const [currencyList, setCurrencyList] = useState(initialCurrencyList)
   const [currencyData, setCurrencyData] = useState(initialCurrencyData)
   const [isCurrencyLoading, setIsCurrencyLoading] = useState(false)
+  const [selectedCurrency, setSelectedCurrency] = useState('')
   const classes = useStyles();
 
   const currencies = currencyData.filter(data => currencyList.indexOf(data.currency) > -1).sort((a, b) => a.currency.localeCompare(b.currency))
@@ -143,6 +144,10 @@ const App: React.FC = () => {
     })
   }
 
+  const handleSetSelectedCurrency = (currency: string) => {
+    setSelectedCurrency(selectedCurrency !== currency ? currency : '')
+  }
+
   const mainCurrency: CurrencyData = currencyData.find(currency => currency.currency === baseCurrency.currency) || initialBaseCurrency
   return (
     <div className={classes.root}>
@@ -161,6 +166,7 @@ const App: React.FC = () => {
             onChange={setValue}
             onFlagClick={() => setShowSwitchDialog(true)}
             flagCode={mainCurrency.flagCode}
+            hide={selectedCurrency !== ''}
           />
           <Cards 
             value={value}
@@ -169,6 +175,7 @@ const App: React.FC = () => {
             isLoading={isCurrencyLoading}
             onFlagClick={handleFlagClick}
             baseCurrency={baseCurrency}
+            onPickCard={(currency) => handleSetSelectedCurrency(currency)}
           />
           <Fab color="primary" data-testid="addCurrency" onClick={() => setShowAddDialog(true)} className={classes.fab} variant="extended">
             <PostAddIcon className={classes.extendedIcon} />
