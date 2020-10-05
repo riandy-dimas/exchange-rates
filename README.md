@@ -11,6 +11,8 @@ A web application which let you convert and displays several currency rates. Cur
 - JPY
 - KRW
 - GBP
+- THB
+- ZAR
 
 ### How to Use
 
