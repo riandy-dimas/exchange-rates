@@ -57,6 +57,16 @@ const CURRENCY_LIST: SimplifiedCurrencyData[] = [
     label: 'South Korean won',
     flagCode: 'kr',
   },
+  {
+    currency: 'THB',
+    label: 'Thai baht',
+    flagCode: 'th',
+  },
+  {
+    currency: 'ZAR',
+    label: 'South African rand',
+    flagCode: 'za',
+  },
 ]
 
 export {
