@@ -12,17 +12,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.makeStyles-box-95 {
-  margin: 0px 0px !important;
-}
-
-@media(max-width: 640px) {
-  .makeStyles-box-95 {
-    margin: 0px 7% !important;
-  }
-}
-
-.makeStyles-container-150 {
-  margin-top: 51px !important;
-}
