@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 code {
@@ -20,4 +21,8 @@ code {
   .makeStyles-box-95 {
     margin: 0px 7% !important;
   }
+}
+
+.makeStyles-container-150 {
+  margin-top: 51px !important;
 }
