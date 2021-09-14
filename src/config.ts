@@ -6,6 +6,8 @@ const API_PATH = {
 
 const FORMAT_NUMERAL = '0,0.000000';
 
+const API_KEY = '1595be4b682895c410ef59e8cba580fe';
+
 const CURRENCY_LIST: SimplifiedCurrencyData[] = [
   {
     currency: 'CAD',
@@ -169,4 +171,4 @@ const CURRENCY_LIST: SimplifiedCurrencyData[] = [
   },
 ];
 
-export { API_PATH, CURRENCY_LIST, FORMAT_NUMERAL };
+export { API_KEY, API_PATH, CURRENCY_LIST, FORMAT_NUMERAL };
