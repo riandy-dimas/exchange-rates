@@ -1,7 +1,7 @@
 import { SimplifiedCurrencyData } from './types';
 
 const API_PATH = {
-  GET_CURRENCY_RATES: 'https://api.exchangeratesapi.io/latest',
+  GET_CURRENCY_RATES: 'http://api.exchangeratesapi.io/latest',
 };
 
 const FORMAT_NUMERAL = '0,0.000000';
