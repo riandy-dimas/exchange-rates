@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { API_PATH } from '../config'
+import { API_KEY, API_PATH } from '../config'
 
 export type GetCurrencyRateRequest = {
   /** Current base currency code represented in three letter code of `ISO 4217`. */
@@ -30,7 +30,7 @@ export const getCurrencyRates = ({
   axios
     // The API we're requesting data from
     .get(API_PATH.GET_CURRENCY_RATES 
-      + `?base=${baseCurrency}`
+      + `?access_key=${API_KEY}&base=${baseCurrency}`
     )
     // Once we get a response, we'll send the data using `onSucceed()`
     .then((response: AxiosResponse<GetCurrencyRateResponse>) => {
