@@ -1,16 +1,7 @@
-# base image
-FROM node:12.2.0-alpine
-
-# set working directory
+FROM node:24.22.1-alpine
 WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# install and cache app dependencies
-COPY package.json /app/package.json
-RUN npm install --silent
-RUN npm install react-scripts@3.3.0 -g --silent
-
-# start app
-CMD ["npm", "start"]
+RUN corepack enable && corepack prepare yarn@1.22.22 --activate
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY . .
+CMD ["yarn", "start"]

@@ -1,0 +1,259 @@
+{
+  "date": "2026-10-25",
+  "repository": "exchange-rates",
+  "baselineHead": "fd0fd7d55558c3c199075d39cd8fc803f8f490ec",
+  "baselineVersions": {
+    "@material-ui/core": "^4.8.3",
+    "@material-ui/icons": "^4.5.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/classnames": "^2.2.9",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/numeral": "^0.0.26",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-flag-icon-css": "^1.0.2",
+    "axios": "^0.21.1",
+    "numeral": "^2.0.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-flag-icon-css": "^1.0.25",
+    "react-scripts": "3.3.0",
+    "typescript": "~3.7.2"
+  },
+  "versions": {
+    "node": "24.22.1",
+    "engines": "24.x",
+    "packageManager": "yarn@1.22.22",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "@types/node": "24.19.2",
+    "react-scripts": "5.0.1"
+  },
+  "lockfile": "yarn.lock",
+  "lockSha256": "54599f515afdd3a1cdad31d1d7781369cdf4ca77cb26088bc5a2f18010c90ed3",
+  "baselineAudit": {
+    "info": 0,
+    "low": 98,
+    "moderate": 419,
+    "high": 723,
+    "critical": 112
+  },
+  "audits": {
+    "all": {
+      "counts": {
+        "info": 0,
+        "low": 5,
+        "moderate": 17,
+        "high": 10,
+        "critical": 0
+      },
+      "highOrCritical": [
+        "nth-check",
+        "postcss",
+        "serialize-javascript",
+        "underscore",
+        "svgo",
+        "webpack-dev-middleware",
+        "node-forge"
+      ]
+    },
+    "production": {
+      "counts": {
+        "info": 0,
+        "low": 5,
+        "moderate": 17,
+        "high": 10,
+        "critical": 0
+      },
+      "highOrCritical": [
+        "nth-check",
+        "postcss",
+        "serialize-javascript",
+        "underscore",
+        "svgo",
+        "webpack-dev-middleware",
+        "node-forge"
+      ]
+    }
+  },
+  "checks": [
+    {
+      "phase": "baseline-audit",
+      "command": "yarn audit --json",
+      "node": "v24.22.1",
+      "exit": 30,
+      "signal": null,
+      "seconds": 6
+    },
+    {
+      "phase": "upgrade-install",
+      "command": "yarn install --non-interactive",
+      "node": "v24.22.1",
+      "exit": 1,
+      "signal": null,
+      "seconds": 277
+    },
+    {
+      "phase": "registry-retry-install",
+      "command": "yarn install --non-interactive --network-concurrency 4 --network-timeout 180000",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 163
+    },
+    {
+      "phase": "final-audit",
+      "command": "yarn audit --json",
+      "node": "v24.22.1",
+      "exit": 14,
+      "signal": null,
+      "seconds": 2
+    },
+    {
+      "phase": "final-production-audit",
+      "command": "yarn audit --json --groups dependencies",
+      "node": "v24.22.1",
+      "exit": 14,
+      "signal": null,
+      "seconds": 2
+    },
+    {
+      "phase": "final-test",
+      "command": "yarn run test --runInBand --no-cache",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 85
+    },
+    {
+      "phase": "final-build",
+      "command": "yarn run build",
+      "node": "v24.22.1",
+      "exit": 1,
+      "signal": null,
+      "seconds": 80
+    },
+    {
+      "phase": "babel-runtime-update",
+      "command": "yarn upgrade @babel/runtime@^7.28.4 --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 45
+    },
+    {
+      "phase": "patched-build",
+      "command": "yarn run build",
+      "node": "v24.22.1",
+      "exit": 1,
+      "signal": null,
+      "seconds": 117
+    },
+    {
+      "phase": "babel-transitive-install",
+      "command": "yarn install --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 46
+    },
+    {
+      "phase": "compatible-build",
+      "command": "yarn run build",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 302
+    },
+    {
+      "phase": "clean-frozen-install",
+      "command": "yarn install --frozen-lockfile --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 1
+    },
+    {
+      "phase": "axios-security-install",
+      "command": "yarn install --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 32
+    },
+    {
+      "phase": "isolated-tests",
+      "command": "yarn run test --runInBand --no-cache",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 56
+    },
+    {
+      "phase": "axios-patched-build",
+      "command": "yarn run build",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 149
+    },
+    {
+      "phase": "compatible-patch-refresh",
+      "command": "yarn upgrade --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 161
+    },
+    {
+      "phase": "patched-tests",
+      "command": "yarn run test --runInBand --no-cache",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 69
+    },
+    {
+      "phase": "patched-final-build",
+      "command": "yarn run build",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 17
+    },
+    {
+      "phase": "testing-types-install",
+      "command": "yarn install --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 100
+    },
+    {
+      "phase": "react-types-install",
+      "command": "yarn install --non-interactive",
+      "node": "v24.22.1",
+      "exit": 0,
+      "signal": null,
+      "seconds": 29
+    }
+  ],
+  "browser": {
+    "name": "exchange-rates",
+    "checks": [
+      "application shell renders with external requests blocked",
+      "desktop and mobile screenshots"
+    ],
+    "errors": [],
+    "pass": true
+  },
+  "notes": [
+    "A same-major Babel runtime resolution repairs Webpack 5's strict ESM extension error in legacy Material UI.",
+    "CRA and old HTTP-client/tooling advisories remain visible.",
+    "The retained Dockerfile is a development container, matching the existing compose configuration. CI builds it and checks startup without external networking. Six tests pass with mocked HTTP requests."
+  ],
+  "blockers": []
+}
