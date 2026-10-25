@@ -1,0 +1,34 @@
+name: Node 24 upgrade checks
+on:
+  pull_request:
+  push:
+    branches: [security/node24-framework-updates]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: .
+    env:
+      CI: 'true'
+      HUSKY: '0'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile --non-interactive
+      - run: yarn run test -- --passWithNoTests
+      - run: yarn run build
+      - name: Validate the Node 24 development container
+        run: |
+          docker build --tag exchange-node24-check .
+          docker run --detach --name exchange-node24-check --network none --env CI=true --env HOST=127.0.0.1 exchange-node24-check
+          docker exec exchange-node24-check node -e 'const end=Date.now()+120000; (async function check(){try{const r=await fetch("http://127.0.0.1:3000");if(r.status===200)return;}catch{} if(Date.now()>end)process.exit(1);setTimeout(check,1000)})()'
+          docker rm --force exchange-node24-check

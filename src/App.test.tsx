@@ -1,6 +1,16 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import App from './App';
+import axios from 'axios';
+
+// UI tests do not contact the deployed exchange-rate provider.
+jest.mock('axios', () => ({
+  __esModule: true,
+  default: { get: jest.fn(() => new Promise(() => {})) },
+}));
+beforeEach(() => {
+  (axios.get as jest.Mock).mockImplementation(() => new Promise(() => {}));
+});
 
 test('renders initial currency', () => {
   const { getByText } = render(<App />);
