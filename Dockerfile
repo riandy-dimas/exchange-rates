@@ -1,4 +1,4 @@
-FROM node:24.22.1-alpine
+FROM node:24.22.2-alpine
 WORKDIR /app
 RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 COPY package.json yarn.lock ./
